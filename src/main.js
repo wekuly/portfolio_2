@@ -130,7 +130,7 @@ function applyTexture(material, texture) {
 
 async function loadCardTexture(index) {
   for (const extension of imageExtensions) {
-    const url = `/cards/card${index}.${extension}`;
+    const url = `${import.meta.env.BASE_URL}cards/card${index}.${extension}`;
 
     try {
       const response = await fetch(url);

@@ -1,10 +1,13 @@
+const asset = (path) =>
+  `${import.meta.env.BASE_URL}${String(path).replace(/^\//, "")}`;
+
 export const cardContents = [
   {
     title: "소개",
     subtitle: "About",
     body: "다양한 플랫폼의 상용 서비스를 개발하며 성능과 안정성을 개선해왔습니다. 사용자 경험과 실시간 인터랙션을 고민하며 새로운 기술을 서비스로 구현하는 개발자입니다.",
     html: `
-      <img src="/detail/1.png" alt="프로필 사진" />
+      <img src="${asset("detail/1.png")}" alt="프로필 사진" />
       <h3>인적사항</h3>
       <dl>
         <div class="resume-row">
@@ -99,7 +102,7 @@ export const cardContents = [
       <h3>주요 프로젝트</h3>
       <section class="project">
         <div class="project-media">
-          <img src="/detail/projects/goldtower.jpg" alt="골드 타워 디펜스" />
+          <img src="${asset("detail/projects/goldtower.jpg")}" alt="골드 타워 디펜스" />
         </div>
         <div class="project-head">
           <strong>골드 타워 디펜스</strong>
@@ -110,7 +113,7 @@ export const cardContents = [
       </section>
       <section class="project">
         <div class="project-media">
-          <img src="/detail/projects/chess.jpg" alt="체스" />
+          <img src="${asset("detail/projects/chess.jpg")}" alt="체스" />
         </div>
         <div class="project-head">
           <strong>체스</strong>
@@ -121,7 +124,7 @@ export const cardContents = [
       </section>
       <section class="project">
         <div class="project-media">
-          <img src="/detail/projects/animalhit.jpg" alt="Animal Hit" />
+          <img src="${asset("detail/projects/animalhit.jpg")}" alt="Animal Hit" />
         </div>
         <div class="project-head">
           <strong>Animal Hit</strong>
@@ -131,7 +134,7 @@ export const cardContents = [
       </section>
       <section class="project">
         <div class="project-media">
-          <img src="/detail/projects/baduk.jpg" alt="바둑" />
+          <img src="${asset("detail/projects/baduk.jpg")}" alt="바둑" />
         </div>
         <div class="project-head">
           <strong>바둑</strong>
@@ -142,7 +145,7 @@ export const cardContents = [
       </section>
       <section class="project">
         <div class="project-media">
-          <img src="/detail/projects/remember_game_image.jpg" alt="기억의 만찬" />
+          <img src="${asset("detail/projects/remember_game_image.jpg")}" alt="기억의 만찬" />
         </div>
         <div class="project-head">
           <strong>기억의 만찬</strong>
@@ -152,7 +155,7 @@ export const cardContents = [
       </section>
       <section class="project">
         <div class="project-media">
-          <img src="/detail/projects/robot_obs.png" alt="로봇관제 시스템" />
+          <img src="${asset("detail/projects/robot_obs.png")}" alt="로봇관제 시스템" />
         </div>
         <div class="project-head">
           <strong>로봇관제 시스템</strong>
@@ -162,7 +165,7 @@ export const cardContents = [
       </section>
       <section class="project">
         <div class="project-media">
-          <img src="/detail/projects/welding_project_01.png" alt="용접모니터링 시스템" />
+          <img src="${asset("detail/projects/welding_project_01.png")}" alt="용접모니터링 시스템" />
         </div>
         <div class="project-head">
           <strong>용접모니터링 시스템</strong>
