@@ -80,6 +80,7 @@ const ring = new THREE.Mesh(ringGeometry, ringMaterial);
 spinner.add(ring);
 
 const itemCount = 6;
+const projectIndex = 3;
 const itemWidth = 0.78;
 const itemHeight = 1.96;
 const itemDepth = 0.05;
@@ -192,6 +193,8 @@ for (let i = 0; i < itemCount; i += 1) {
   });
 }
 
+spinner.rotation.y = -(projectIndex / itemCount) * Math.PI * 2;
+
 const detailCardEl = document.getElementById("detail-card");
 const copyEl = document.getElementById("detail-copy");
 const copyIndex = copyEl.querySelector(".detail-copy__index");
@@ -218,13 +221,13 @@ const view = {
   detailScale: 0.0064,
 };
 const carouselRestX = 0;
-const carouselOpenX = -3;
+const carouselOpenX = -3.85;
 const carouselRestScale = 0.72;
-const carouselOpenScale = 0.5;
+const carouselOpenScale = 0.28;
 const detailRestX = 2.8;
-const detailOpenX = 0.52;
+const detailOpenX = 0.35;
 const detailRestScale = 0.0056;
-const detailOpenScale = 0.0064;
+const detailOpenScale = 0.0066;
 let selectedCard = null;
 
 function fillDetail(card) {
