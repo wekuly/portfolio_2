@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        overflow: hidden;
+        background: #0b0b0d;
+        cursor: grab;
+        touch-action: none;
+      }
+
+      canvas {
+        display: block;
+        cursor: grab;
+      }
+
+      .detail-card {
+        width: 360px;
+        height: 475px;
+        overflow: auto;
+        padding: 28px 24px 24px;
+        background: #fff;
+        color: #222;
+        font-family: "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+        pointer-events: none;
+      }
+
+      .detail-card.is-open {
+        pointer-events: auto;
+        cursor: default;
+      }
+
+      .detail-card img {
+        display: block;
+        width: 100%;
+        margin-bottom: 16px;
+      }
+
+      .detail-card img[alt="프로필 사진"] {
+        width: 112px;
+        height: 140px;
+        margin: 0 auto 20px;
+        object-fit: cover;
+        object-position: center top;
+        border: 1px solid #d8d8d8;
+        background: #f3f3f3;
+      }
+
+      .detail-card h3 {
+        margin: 0 0 12px;
+        padding-bottom: 6px;
+        border-bottom: 1.5px solid #222;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .detail-card h3:not(:first-child) {
+        margin-top: 22px;
+      }
+
+      .detail-card p {
+        margin-bottom: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.75;
+        color: #222;
+      }
+
+      .detail-card dl + p {
+        margin-top: 16px;
+      }
+
+      .resume-bio {
+        font-size: 11px;
+      }
+
+      .resume-row {
+        display: flex;
+        gap: 10px;
+        padding: 7px 0;
+        border-bottom: 1px solid #ececec;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.6;
+      }
+
+      .resume-row:last-child {
+        border-bottom: 0;
+      }
+
+      .resume-row dt {
+        flex: 0 0 64px;
+        color: #666;
+        font-weight: 600;
+      }
+
+      .resume-row dd {
+        flex: 1;
+        color: #222;
+      }
+
+      .skill-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        list-style: none;
+      }
+
+      .skill-list li {
+        padding: 6px 11px;
+        border: 1px solid #cfcfcf;
+        background: #fff;
+        color: #222;
+        font-size: 12px;
+        line-height: 1.3;
+      }
+
+      .job + .job {
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid #ececec;
+      }
+
+      .job-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 13px;
+      }
+
+      .job-head strong {
+        font-weight: 700;
+      }
+
+      .job-head span {
+        flex-shrink: 0;
+        color: #666;
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .job-role {
+        margin: 10px 0 4px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .job-list {
+        margin: 0 0 6px 14px;
+        padding: 0;
+      }
+
+      .job-list li {
+        margin-bottom: 3px;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.55;
+        color: #333;
+      }
+
+      .job-note {
+        margin-top: 10px;
+        font-size: 11px;
+        color: #555;
+      }
+
+      .project + .project {
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid #ececec;
+      }
+
+      .project-media {
+        height: 112px;
+        margin-bottom: 8px;
+        overflow: hidden;
+        background: #f4f4f4;
+        border: 1px solid #e6e6e6;
+      }
+
+      .project-media img {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        object-fit: cover;
+      }
+
+      .project-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 6px;
+        font-size: 13px;
+      }
+
+      .project-head strong {
+        font-weight: 700;
+      }
+
+      .project-head span {
+        flex-shrink: 0;
+        color: #666;
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .project p {
+        font-size: 11px;
+      }
+
+      .project-result {
+        color: #444;
+      }
+
+      .detail-copy {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        width: min(28vw, 320px);
+        max-height: 70vh;
+        overflow: auto;
+        color: #f4f1ea;
+        font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s ease;
+        cursor: default;
+      }
+
+      .detail-copy.is-open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .detail-copy__index {
+        margin-bottom: 18px;
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        color: rgba(244, 241, 234, 0.45);
+      }
+
+      .detail-copy h2 {
+        margin-bottom: 8px;
+        font-size: 32px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+      }
+
+      .detail-copy__subtitle {
+        margin-bottom: 22px;
+        font-size: 13px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(244, 241, 234, 0.5);
+      }
+
+      .detail-copy__body {
+        font-size: 15px;
+        line-height: 1.75;
+        white-space: pre-wrap;
+        color: rgba(244, 241, 234, 0.86);
+      }
+
+      .nav-btn {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 3;
+        display: grid;
+        place-items: center;
+        width: 46px;
+        height: 46px;
+        padding: 0;
+        border: 1px solid rgba(244, 241, 234, 0.28);
+        border-radius: 50%;
+        background: rgba(11, 11, 13, 0.72);
+        color: #f4f1ea;
+        font-size: 28px;
+        line-height: 1;
+        cursor: pointer;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s ease, background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .nav-btn.is-open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .nav-btn:hover {
+        background: rgba(244, 241, 234, 0.12);
+        border-color: rgba(244, 241, 234, 0.55);
+      }
+
+      .nav-btn--close {
+        top: 24px;
+        right: 28px;
+        left: auto;
+        font-size: 26px;
+      }
+
+      .hud {
+        position: fixed;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+        color: #f4f1ea;
+        font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      }
+
+      .hud__brand {
+        position: absolute;
+        top: 28px;
+        left: 32px;
+      }
+
+      .hud__name {
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+      }
+
+      .hud__role {
+        margin-top: 6px;
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        color: rgba(244, 241, 234, 0.5);
+      }
+
+      .hud__hint {
+        position: absolute;
+        left: 50%;
+        bottom: 36px;
+        transform: translateX(-50%);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        color: rgba(244, 241, 234, 0.42);
+        white-space: nowrap;
+        transition: opacity 0.3s ease;
+      }
+
+      .hud.is-detail .hud__hint {
+        opacity: 0;
+      }
+
+      .hud__contact {
+        position: absolute;
+        right: 32px;
+        bottom: 36px;
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        color: rgba(244, 241, 234, 0.45);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hud" id="hud">
+      <div class="hud__brand">
+        <p class="hud__name">김태환</p>
+        <p class="hud__role">PORTFOLIO · WEB / 3D</p>
+      </div>
+      <p class="hud__hint">카드를 눌러 자세히 보기 · 드래그해서 돌리기</p>
+      <p class="hud__contact">010-9767-5806</p>
+    </div>
+    <div class="detail-card" id="detail-card"></div>
+    <aside class="detail-copy" id="detail-copy">
+      <p class="detail-copy__index"></p>
+      <h2></h2>
+      <p class="detail-copy__subtitle"></p>
+      <p class="detail-copy__body"></p>
+    </aside>
+    <button class="nav-btn" id="nav-prev" type="button" aria-label="이전">‹</button>
+    <button class="nav-btn" id="nav-next" type="button" aria-label="다음">›</button>
+    <button class="nav-btn nav-btn--close" id="nav-close" type="button" aria-label="닫기">×</button>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
